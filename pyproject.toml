@@ -10,5 +10,8 @@ dependencies = [
     "loguru>=0.7.3",
     "pillow>=12.0.0",
     "pymupdf>=1.26.6",
+    "pymupdf-layout>=0.0.15",
     "pypdfium2>=5.0.0",
+    "pymupdf4llm>=0.1.9",
+    "streamlit>=1.38.0",
 ]
