@@ -98,6 +98,6 @@ For additional logging, set `LOG_LEVEL` or edit the `logger` configuration in `m
 - [DocLayout-YOLO](https://github.com/juliozhao/DocLayout-YOLO)
 - [PyMuPDF](https://pymupdf.readthedocs.io/)
 - [PyMuPDF4LLM](https://github.com/pymupdf/RAG/blob/main/pymupdf4llm.md)
-- [Streamlit](https://streamlit.io/)
+- [Flask](https://flask.palletsprojects.com/)
 
 Happy extracting! 🎉
