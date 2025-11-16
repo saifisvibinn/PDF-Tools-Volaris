@@ -1,6 +1,6 @@
 # PDF Layout Extraction Companion
 
-A streamlined workflow for extracting figures, tables, annotated layouts, and markdown text from scientific PDFs using [DocLayout-YOLO](https://github.com/juliozhao/DocLayout-YOLO), PyMuPDF, and Streamlit. The project exposes both a command-line pipeline (`main.py`) and a full-featured web UI (`streamlit_app.py`).
+A streamlined workflow for extracting figures, tables, annotated layouts, and markdown text from scientific PDFs using [DocLayout-YOLO](https://github.com/juliozhao/DocLayout-YOLO), PyMuPDF, and Flask. The project exposes a command-line pipeline (`main.py`) and a modern Flask web UI (`app.py`).
 
 ---
 
@@ -9,7 +9,7 @@ A streamlined workflow for extracting figures, tables, annotated layouts, and ma
 - **Cross-page stitching** for multi-page tables, captions, titles, and body text
 - **Annotated PDF output** with bounding boxes for detected regions
 - **Markdown export** powered by `pymupdf4llm` / `pymupdf-layout`
-- **Streamlit UI** with extraction modes: _Images only_, _Markdown only_, or _Images & Markdown_
+- **Flask Web UI** with modern design, dark/light theme, GPU/CPU status, and individual PDF viewing
 - Unified `output/<PDF stem>/` directory structure for CLI + UI runs
 
 ---
@@ -42,16 +42,23 @@ Each subdirectory contains:
 - `*.md` – markdown export (if `pymupdf4llm` is installed)
 - `figures/` & `tables/` – cropped PNGs with stitched captions/titles
 
-### Streamlit UI
-Launch the interactive app:
+### Flask Web App (Recommended)
+Launch the modern Flask web interface:
 ```bash
-uv run streamlit run streamlit_app.py
+python run_flask_gpu.py
 ```
-- Choose extraction mode (images / markdown / both)
-- Upload one or multiple PDFs
-- Results appear immediately with download buttons and previews
+Then open your browser to `http://localhost:5000`
 
-All UI runs also write into `./output/<PDF stem>/` using the same structure as the CLI.
+**Features:**
+- Clean, modern UI with dark/light theme support
+- Multiple PDF upload and processing
+- Individual PDF output viewing with sidebar navigation
+- Real-time GPU/CPU status display
+- Image gallery for figures and tables
+- Markdown preview and download
+- Responsive design for mobile and desktop
+
+All Flask app runs also write into `./output/<PDF stem>/` using the same structure as the CLI.
 
 ---
 
@@ -60,7 +67,7 @@ All UI runs also write into `./output/<PDF stem>/` using the same structure as t
 - **Detection thresholds:** configurable in `main.py`
 - **Layout stitching:** tables, captions, titles, body text
 - **Markdown extraction:** defaults to enabled (`pymupdf4llm.to_markdown`); falls back gracefully if the package is missing
-- **Output directory:** `./output` (configurable near the bottom of `main.py` and top of `streamlit_app.py`)
+- **Output directory:** `./output` (configurable near the bottom of `main.py`)
 
 ---
 
@@ -68,7 +75,9 @@ All UI runs also write into `./output/<PDF stem>/` using the same structure as t
 | Path | Description |
 |------|-------------|
 | `main.py` | CLI pipeline for batch PDF processing |
-| `streamlit_app.py` | Streamlit UI for uploads & previews |
+| `app.py` | Flask web application (recommended UI) |
+| `templates/` | Flask HTML templates |
+| `static/` | Flask static files (CSS, JS) |
 | `pdfs/` | Source PDFs (gitignored) |
 | `output/` | Generated outputs per PDF |
 | `pyproject.toml` | Project metadata & dependency list |

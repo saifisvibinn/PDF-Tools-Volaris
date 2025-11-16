@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDF Layout Extractor</title>
+    
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <link href="{{ url_for('static', filename='css/styles.css') }}" rel="stylesheet">
+</head>
+<body data-theme="light">
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary-custom">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">
+                <i class="fas fa-file-pdf me-2"></i>
+                PDF Layout Extractor
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <button class="btn btn-link nav-link text-white" id="themeToggle">
+                            <i class="fas fa-moon" id="themeIcon"></i>
+                        </button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Container -->
+    <div class="container-fluid mt-4">
+        <!-- Device Status Card -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h5 class="card-title mb-1">
+                                    <i class="fas fa-microchip me-2"></i>
+                                    Processing Device
+                                </h5>
+                                <p class="text-muted mb-0" id="deviceStatus">
+                                    <span class="badge bg-secondary" id="deviceBadge">Checking...</span>
+                                </p>
+                            </div>
+                            <div class="text-end">
+                                <div id="deviceInfo" class="small text-muted">
+                                    <div id="deviceName">-</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Upload Section -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-primary-custom text-white">
+                        <h5 class="mb-0">
+                            <i class="fas fa-upload me-2"></i>
+                            Upload PDFs
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <form id="uploadForm">
+                            <div class="mb-3">
+                                <label for="fileInput" class="form-label">Select PDF Files</label>
+                                <input type="file" class="form-control" id="fileInput" 
+                                       accept=".pdf" multiple required>
+                                <div class="form-text">You can select multiple PDF files at once</div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label class="form-label">Extraction Mode</label>
+                                <div class="btn-group w-100" role="group">
+                                    <input type="radio" class="btn-check" name="extractionMode" 
+                                           id="modeImages" value="images" checked>
+                                    <label class="btn btn-outline-primary" for="modeImages">
+                                        <i class="fas fa-images me-2"></i>Images Only
+                                    </label>
+                                    
+                                    <input type="radio" class="btn-check" name="extractionMode" 
+                                           id="modeMarkdown" value="markdown">
+                                    <label class="btn btn-outline-primary" for="modeMarkdown">
+                                        <i class="fas fa-file-code me-2"></i>Markdown Only
+                                    </label>
+                                    
+                                    <input type="radio" class="btn-check" name="extractionMode" 
+                                           id="modeBoth" value="both">
+                                    <label class="btn btn-outline-primary" for="modeBoth">
+                                        <i class="fas fa-layer-group me-2"></i>Both
+                                    </label>
+                                </div>
+                            </div>
+                            
+                            <button type="submit" class="btn btn-primary w-100" id="uploadBtn">
+                                <i class="fas fa-upload me-2"></i>
+                                Upload and Process
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Processing Status -->
+        <div class="row mb-4" id="processingSection" style="display: none;">
+            <div class="col-12">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center">
+                            <div class="spinner-border text-primary me-3" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                            <div>
+                                <h6 class="mb-0">Processing PDFs...</h6>
+                                <small class="text-muted" id="processingStatus">Please wait</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Results Section -->
+        <div class="row" id="resultsSection" style="display: none;">
+            <div class="col-md-4">
+                <div class="card shadow-sm sticky-top" style="top: 20px;">
+                    <div class="card-header bg-primary-custom text-white">
+                        <h5 class="mb-0">
+                            <i class="fas fa-list me-2"></i>
+                            Processed PDFs
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="list-group" id="pdfList">
+                            <!-- PDF list will be populated here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-8">
+                <div id="pdfDetails">
+                    <!-- PDF details will be shown here -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Empty State -->
+        <div class="row" id="emptyState">
+            <div class="col-12">
+                <div class="card shadow-sm">
+                    <div class="card-body text-center py-5">
+                        <i class="fas fa-file-pdf fa-3x text-muted mb-3"></i>
+                        <h5 class="text-muted">No PDFs processed yet</h5>
+                        <p class="text-muted">Upload PDF files above to get started</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JS -->
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>
+
+

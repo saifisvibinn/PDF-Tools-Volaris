@@ -10,3 +10,5 @@ wheels/
 .venv
 pdfs/*
 /output4
+/output
+/uploads

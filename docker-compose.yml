@@ -1,0 +1,48 @@
+version: "3.9"
+
+# Docker Compose for Flask/FastAPI app with GPU access on Docker Desktop + WSL2
+# Notes:
+# - Requires Docker Desktop for Windows with WSL2 integration enabled.
+# - NVIDIA GPU access requires the NVIDIA Container Toolkit on the host.
+# - Set APP_TYPE to "flask" (default) or "fastapi".
+# - Set PORT to 5000 (Flask) or 8000 (FastAPI). Ports mapping uses ${PORT}.
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        # Change to "fastapi" if your entrypoint is FastAPI
+        APP_TYPE: ${APP_TYPE:-flask}
+    container_name: pdf-extractor-api
+    environment:
+      # Runtime selection
+      APP_TYPE: ${APP_TYPE:-flask}
+      # Port inside the container (and published on the host)
+      PORT: ${PORT:-5000}
+      # Optional: any app env vars can go here
+      # PYTHONUNBUFFERED: "1"
+    ports:
+      # Maps host ${PORT} to container ${PORT}
+      - "${PORT:-5000}:${PORT:-5000}"
+    volumes:
+      # Mount live assets for iterative development without rebuilding
+      - ./static:/app/static
+      - ./templates:/app/templates
+      - ./uploads:/app/uploads
+      # Optional: mount output to persist results across rebuilds
+      - ./output:/app/output
+    restart: unless-stopped
+
+    # GPU access (Docker Desktop + NVIDIA Container Toolkit)
+    # For Docker Desktop on Windows/WSL2, use the simpler gpus syntax
+    gpus: all
+    # Alternative (Swarm-style) - commented as Docker Desktop prefers gpus: all
+    # deploy:
+    #   resources:
+    #     reservations:
+    #       devices:
+    #         - capabilities: ["gpu"]
+
+
