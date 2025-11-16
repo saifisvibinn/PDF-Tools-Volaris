@@ -49,8 +49,9 @@ mount.add_local_file("main.py", remote_path="/app/main.py")
 # Create the Modal app
 app = modal.App("pdf-layout-extractor", image=image)
 
-# GPU configuration - using T4 for cost efficiency, can upgrade to A10G or A100
-GPU_CONFIG = modal.gpu.T4(count=1)  # Change to A10G or A100 for better performance
+# GPU configuration - using T4 for cheapest option (~$0.50/hour while active)
+# For no GPU (CPU only), set GPU_CONFIG = None (much cheaper but slower)
+GPU_CONFIG = modal.gpu.T4(count=1)  # Cheapest GPU option
 
 
 @app.function(
