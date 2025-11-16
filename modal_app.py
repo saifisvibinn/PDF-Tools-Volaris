@@ -36,35 +36,31 @@ image = (
     .run_commands(
         "mkdir -p /app/uploads /app/output /app/static /app/templates"
     )
+    # Copy application files directly into the image
+    .add_local_dir("static", remote_path="/app/static")
+    .add_local_dir("templates", remote_path="/app/templates")
+    .add_local_file("app.py", remote_path="/app/app.py")
+    .add_local_file("main.py", remote_path="/app/main.py")
 )
-
-# Create mounts for local files and directories
-# Modal uses instance methods: create Mount() then add files/dirs
-mount = modal.mount.Mount()
-mount.add_local_dir("static", remote_path="/app/static")
-mount.add_local_dir("templates", remote_path="/app/templates")
-mount.add_local_file("app.py", remote_path="/app/app.py")
-mount.add_local_file("main.py", remote_path="/app/main.py")
 
 # Create the Modal app
 app = modal.App("pdf-layout-extractor", image=image)
 
 # GPU configuration - using T4 for cheapest option (~$0.50/hour while active)
-# For no GPU (CPU only), set GPU_CONFIG = None (much cheaper but slower)
-GPU_CONFIG = modal.gpu.T4(count=1)  # Cheapest GPU option
+# For no GPU (CPU only), set gpu=None (much cheaper but slower)
+# Valid options: "T4", "A10G", "A100", or None
 
 
 @app.function(
     image=image,
-    gpu=GPU_CONFIG,
-    mounts=[mount],  # Mount local files and directories
+    gpu="T4",  # Cheapest GPU option (~$0.50/hour while active)
     secrets=[
         # Add any secrets here if needed (e.g., HUGGINGFACE_TOKEN)
         # modal.Secret.from_name("huggingface-secret"),
     ],
-    allow_concurrent_inputs=10,  # Handle up to 10 concurrent requests
     timeout=3600,  # 1 hour timeout for long PDF processing
 )
+@modal.concurrent(10)  # Handle up to 10 concurrent requests
 @modal.asgi_app()
 def flask_app():
     """
@@ -93,10 +89,10 @@ def flask_app():
 # Alternative: Deploy as a web endpoint with automatic HTTPS
 @app.function(
     image=image,
-    gpu=GPU_CONFIG,
-    allow_concurrent_inputs=10,
+    gpu="T4",
     timeout=3600,
 )
+@modal.concurrent(10)
 @modal.web_endpoint(method="GET", label="pdf-extractor")
 def health():
     """Health check endpoint."""
