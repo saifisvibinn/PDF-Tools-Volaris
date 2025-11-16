@@ -8,7 +8,28 @@ wheels/
 
 # Virtual environments
 .venv
+
+# Output directories (keep structure but ignore contents)
 pdfs/*
-/output4
-/output
-/uploads
+!pdfs/.gitkeep
+output/*
+!output/.gitkeep
+uploads/*
+!uploads/.gitkeep
+
+# Temporary files
+*.tmp
+*.log
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Hugging Face cloned space (don't push recursively)
+PDF-toolkit-Volaris/

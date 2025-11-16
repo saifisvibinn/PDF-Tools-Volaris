@@ -1,3 +1,15 @@
+---
+title: PDF Layout Extractor
+emoji: 📄
+colorFrom: blue
+colorTo: green
+sdk: streamlit
+sdk_version: "1.28.0"
+app_file: pdf_extractor_gui.py
+pinned: false
+python_version: "3.10"
+---
+
 # PDF Layout Extraction Companion
 
 A streamlined workflow for extracting figures, tables, annotated layouts, and markdown text from scientific PDFs using [DocLayout-YOLO](https://github.com/juliozhao/DocLayout-YOLO), PyMuPDF, and Flask. The project exposes a command-line pipeline (`main.py`) and a modern Flask web UI (`app.py`).

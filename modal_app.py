@@ -12,6 +12,11 @@ image = (
         "gcc",
         "g++",
         "libgl1",
+        "libglib2.0-0",  # Required for cv2 (provides libgthread-2.0.so.0)
+        "libsm6",        # Required for cv2
+        "libxext6",      # Required for cv2
+        "libxrender-dev",  # Required for cv2
+        "libgomp1",      # Required for cv2
         "libffi-dev",
         "libjpeg62-turbo-dev",
         "zlib1g-dev",
@@ -29,6 +34,7 @@ image = (
         "pypdfium2>=5.0.0",
         "pymupdf4llm>=0.1.9",
         "flask>=3.0.0",
+        "fastapi>=0.109.0",  # Required for Modal web endpoints
         "werkzeug>=3.0.0",
         "gunicorn>=21.2.0",
         "asgiref>=3.7.0",  # For WSGI-to-ASGI conversion
