@@ -9,7 +9,7 @@
 # - GPU access is provided by NVIDIA Container Toolkit on the host; no CUDA install here
 #
 
-ARG PYTHON_VERSION=3.10
+ARG PYTHON_VERSION=3.12
 FROM python:${PYTHON_VERSION}-slim AS base
 
 # Allow switching app type at build/run time: "flask" (default) or "fastapi"
@@ -47,6 +47,7 @@ RUN python -m pip install --no-cache-dir gunicorn uvicorn
 
 # Install project dependencies from pyproject.toml (preferred), else requirements.txt
 # Note: If using CUDA-enabled PyTorch, ensure your pyproject/requirements pins a +cuXX wheel.
+# Since we're using Python 3.12 (matching pyproject.toml's requires-python), pip install . works fine.
 RUN if [ -f "pyproject.toml" ]; then \
         python -m pip install --no-cache-dir . ; \
     elif [ -f "requirements.txt" ]; then \
