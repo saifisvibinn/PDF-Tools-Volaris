@@ -98,6 +98,9 @@ See [MODAL_DEPLOYMENT.md](MODAL_DEPLOYMENT.md) for detailed instructions.
 |------|-------------|
 | `main.py` | CLI pipeline for batch PDF processing |
 | `app.py` | Flask web application (recommended UI) |
+| `run_flask_gpu.py` | Local Flask runner with GPU support |
+| `modal_app.py` | Modal.com deployment configuration (cloud GPU) |
+| `MODAL_DEPLOYMENT.md` | Modal.com deployment guide |
 | `templates/` | Flask HTML templates |
 | `static/` | Flask static files (CSS, JS) |
 | `pdfs/` | Source PDFs (gitignored) |
