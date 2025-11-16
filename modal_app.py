@@ -33,14 +33,18 @@ image = (
         "gunicorn>=21.2.0",
         "asgiref>=3.7.0",  # For WSGI-to-ASGI conversion
     )
-    .copy_local_dir("static", remote_path="/app/static")
-    .copy_local_dir("templates", remote_path="/app/templates")
-    .copy_local_file("app.py", remote_path="/app/app.py")
-    .copy_local_file("main.py", remote_path="/app/main.py")
     .run_commands(
-        "mkdir -p /app/uploads /app/output"
+        "mkdir -p /app/uploads /app/output /app/static /app/templates"
     )
 )
+
+# Create mounts for local files and directories
+# Modal uses instance methods: create Mount() then add files/dirs
+mount = modal.mount.Mount()
+mount.add_local_dir("static", remote_path="/app/static")
+mount.add_local_dir("templates", remote_path="/app/templates")
+mount.add_local_file("app.py", remote_path="/app/app.py")
+mount.add_local_file("main.py", remote_path="/app/main.py")
 
 # Create the Modal app
 app = modal.App("pdf-layout-extractor", image=image)
@@ -52,6 +56,7 @@ GPU_CONFIG = modal.gpu.T4(count=1)  # Change to A10G or A100 for better performa
 @app.function(
     image=image,
     gpu=GPU_CONFIG,
+    mounts=[mount],  # Mount local files and directories
     secrets=[
         # Add any secrets here if needed (e.g., HUGGINGFACE_TOKEN)
         # modal.Secret.from_name("huggingface-secret"),
