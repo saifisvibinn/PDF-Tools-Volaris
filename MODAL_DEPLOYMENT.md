@@ -41,17 +41,20 @@ This guide explains how to deploy the PDF Layout Extractor Flask app to Modal.co
 
 ### GPU Options
 
-The default GPU is **T4** (cost-efficient). You can change it in `modal_app.py`:
+The default GPU is **T4** (cheapest GPU option at ~$0.50/hour). You can change it in `modal_app.py`:
 
 ```python
-# For T4 (default, cheaper)
+# For T4 (CHEAPEST, default: ~$0.50/hour while active)
 GPU_CONFIG = modal.gpu.T4(count=1)
 
-# For A10G (faster, more expensive)
+# For A10G (faster, more expensive: ~$1.50/hour while active)
 GPU_CONFIG = modal.gpu.A10G(count=1)
 
-# For A100 (fastest, most expensive)
+# For A100 (fastest, most expensive: ~$3.50/hour while active)
 GPU_CONFIG = modal.gpu.A100(count=1)
+
+# For CPU only (cheapest, no GPU: ~$0.10/hour but much slower)
+GPU_CONFIG = None
 ```
 
 ### Timeout Settings
@@ -72,11 +75,16 @@ allow_concurrent_inputs=10,  # Change as needed
 
 ## Cost
 
-- **T4 GPU**: ~$0.50/hour while active
-- **A10G GPU**: ~$1.50/hour while active
-- **A100 GPU**: ~$3.50/hour while active
-- **Idle time**: $0 (pays only when processing)
+**GPU Options (cheapest to most expensive):**
+- **CPU only**: ~$0.10/hour while active (slowest, no GPU)
+- **T4 GPU**: ~$0.50/hour while active (cheapest GPU, current setting) ✅
+- **A10G GPU**: ~$1.50/hour while active (faster)
+- **A100 GPU**: ~$3.50/hour while active (fastest)
+
+**Additional costs:**
+- **Idle time**: $0 (pays only when processing requests)
 - **Storage**: Free for reasonable usage
+- **Bandwidth**: Free for reasonable usage
 
 ## Local Testing
 
