@@ -43,7 +43,7 @@ Each subdirectory contains:
 - `figures/` & `tables/` – cropped PNGs with stitched captions/titles
 
 ### Flask Web App (Recommended)
-Launch the modern Flask web interface:
+Launch the modern Flask web interface locally:
 ```bash
 python run_flask_gpu.py
 ```
@@ -59,6 +59,28 @@ Then open your browser to `http://localhost:5000`
 - Responsive design for mobile and desktop
 
 All Flask app runs also write into `./output/<PDF stem>/` using the same structure as the CLI.
+
+### Deploy to Modal.com (Cloud with GPU)
+Deploy your Flask app online with GPU support using Modal:
+```bash
+# Install Modal CLI
+pip install modal
+
+# Authenticate with Modal
+modal token new
+
+# Deploy to Modal
+modal deploy modal_app.py
+```
+
+See [MODAL_DEPLOYMENT.md](MODAL_DEPLOYMENT.md) for detailed instructions.
+
+**Benefits:**
+- GPU support (T4, A10G, or A100)
+- Pay-per-use pricing
+- Automatic HTTPS
+- Auto-scaling
+- Global deployment
 
 ---
 
