@@ -59,8 +59,8 @@ app = modal.App("pdf-layout-extractor", image=image)
         # modal.Secret.from_name("huggingface-secret"),
     ],
     timeout=3600,  # 1 hour timeout for long PDF processing
+    max_containers=10,  # Handle up to 10 concurrent requests
 )
-@modal.concurrent(10)  # Handle up to 10 concurrent requests
 @modal.asgi_app()
 def flask_app():
     """
@@ -91,15 +91,16 @@ def flask_app():
     image=image,
     gpu="T4",
     timeout=3600,
+    max_containers=10,
 )
-@modal.concurrent(10)
-@modal.web_endpoint(method="GET", label="pdf-extractor")
+@modal.fastapi_endpoint(method="GET", label="pdf-extractor")
 def health():
     """Health check endpoint."""
     return {"status": "ok", "service": "pdf-layout-extractor"}
 
 
 if __name__ == "__main__":
-    # For local testing
-    app.serve()
+    # For local testing with Modal dev server:
+    # Run: modal serve modal_app.py
+    pass
 
